@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import App from './containers/App';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 /*
 const context = {
@@ -11,4 +12,8 @@ console.log(JSON.parse(sessionStorage.getItem("context")));
 */
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App/>);
+root.render(
+    <BrowserRouter>
+        <App/>
+    </BrowserRouter>
+);
