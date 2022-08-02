@@ -37,11 +37,15 @@ class App extends Component {
                     <Route exact path ="/" element={
                         <div>
                             <p>Welcome Home !</p>
-                            <Link to="/login">Login</Link>
+                            <Link to="/login/google">Login with Google</Link>
+                            <Link to="/login/locally">Login locally</Link>
+                            <Link to="/login/idms">Login with IDMS</Link>
                         </div>
                     }>
                     </Route>  
-                    <Route exact path ="/login" element={<GoogleButton onClick={redirectToGoogleSSO}/>}></Route>
+                    <Route exact path ="/login/google" element={<GoogleButton onClick={redirectToGoogleSSO}/>}></Route>
+                    <Route exact path ="/login/locally" element={<GoogleButton onClick={redirectToGoogleSSO}/>}></Route>
+                    <Route exact path ="/login/idms" element={<GoogleButton onClick={redirectToGoogleSSO}/>}></Route>
                     <Route exact path ="/login/success" element={<LoginSuccess/>}></Route>
                 </Routes>
             </div>

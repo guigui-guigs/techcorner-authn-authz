@@ -33,6 +33,7 @@ exports.logout = (req, res, next) => {
     }
 };
 
+// TO INVESTIGATE WHY IT DOESN'T WORK
 exports.assign = (req, res, next) => {
     if (req.body.accessContent) {
         User.updateOne({federatedId: req.body.federatedId},{accessContent: req.body.accessContent})
@@ -46,13 +47,13 @@ exports.assign = (req, res, next) => {
     }
 };
 
-exports.rights = (req, res, next) => {
+exports.GETrights = (req, res, next) => {
     User.findOne({federatedId: req.body.federatedId},{_id:0, accessContent:1, admin: 1})
         .then(user => res.status(200).json(user))
         .catch(error => res.status(400).json({error}));
 };
 
-exports.allusers = (req, res, next) => {
+exports.GETallusers = (req, res, next) => {
     User.find({ }, {_id:0, federatedId: 1, googleId: 1, email: 1, accessContent: 1})
         .then(users => res.status(200).json(users))
         .catch(error => res.status(400).json({error}));

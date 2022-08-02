@@ -41,10 +41,10 @@ app.use((req, res, next) => {
 app.use(
   cookieSession({
     name: "session",
-    maxAge: 24 * 60 * 60 * 1000,
     keys: [process.env.COOKIE_KEY]
   })
 );
+// no max age, so that it's a session cookie
 
 app.use(passport.initialize());
 app.use(passport.session());
