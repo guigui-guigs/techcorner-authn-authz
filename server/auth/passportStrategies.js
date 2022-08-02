@@ -71,9 +71,7 @@ passport.use(new OpenIDConnectStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: GOOGLE_CALLBACK_URL,
-}, async (req, accessToken, refreshToken, profile, done) => {
-
-    console.log(accessToken);
+}, async (accessToken, refreshToken, profile, done) => {
 
     const defaultUser = new User({
         federatedId: profile.emails[0].value,
