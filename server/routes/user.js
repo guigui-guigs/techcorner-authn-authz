@@ -5,7 +5,7 @@ const router = express.Router();
 const userCtrl = require('../controllers/user');
 const authmiddleware = require('../middlewares/auth');
 const jwt = require('jsonwebtoken');
-//const config = require('../config/index');
+
 require("dotenv").config();
 
 const successLoginUrl = "http://localhost:3000/login/success";

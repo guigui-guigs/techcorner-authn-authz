@@ -71,28 +71,31 @@ passport.use(new OpenIDConnectStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: GOOGLE_CALLBACK_URL,
+    passReqToCallback : true
 }, async (accessToken, refreshToken, profile, done) => {
-
-    const defaultUser = new User({
-        federatedId: profile.emails[0].value,
-        email: profile.emails[0].value,
-        googleId: profile.id,
-        accessContent: false,
-        admin: false
-    });
-
-    User.findOne({googleId: profile.id})
-        .then(user => {
-            if (user === null) {
-                defaultUser.save()
-                    .then(() => done(null, defaultUser))
-                    .catch(error => done(error, null));
-            } else {
-                done(null, user);
-            }
-        })
-        .catch(error => done(error, null));
+    try {
+        console.log(profile);
+        const defaultUser = new User({
+            federatedId: profile.emails[0].value,
+            email: profile.emails[0].value,
+            googleId: profile.id,
+            accessContent: false,
+            admin: false
+        });
+        User.findOne({googleId: profile.id})
+            .then(user => {
+                if (!user) {
+                    defaultUser.save()
+                        .then(() => done(null, defaultUser))
+                        .catch(error => done(error, null));
+                } else {
+                    done(null, user);
+                }
+            })
+            .catch(error => done(error, null));
+    } catch (error) {
+        done(error, null)
+    }
 }));
-
 
 /////////////// PASSPORT IDMS ///////////////

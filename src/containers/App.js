@@ -47,6 +47,7 @@ class App extends Component {
                     <Route exact path ="/login/locally" element={<GoogleButton onClick={redirectToGoogleSSO}/>}></Route>
                     <Route exact path ="/login/idms" element={<GoogleButton onClick={redirectToGoogleSSO}/>}></Route>
                     <Route exact path ="/login/success" element={<LoginSuccess/>}></Route>
+                    <Route exact path ="/login/error" element={<div>Login error</div>}></Route>
                 </Routes>
             </div>
         )
