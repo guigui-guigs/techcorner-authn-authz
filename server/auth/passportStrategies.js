@@ -61,16 +61,55 @@ passport.use(new passportJWT.Strategy({
 /////////////////////////////////////////////////////////////////
 
 const OpenIDConnectStrategy = require('passport-openidconnect');
-const GOOGLE_CALLBACK_URL = "http://localhost:5000/api/authn/google/callback";
 
-passport.use(new OpenIDConnectStrategy({
+passport.use("google-oidc", new OpenIDConnectStrategy({
     issuer: 'https://accounts.google.com',
     authorizationURL: 'https://accounts.google.com/o/oauth2/v2/auth',
     tokenURL: 'https://oauth2.googleapis.com/token',
     userInfoURL: 'https://openidconnect.googleapis.com/v1/userinfo',
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: GOOGLE_CALLBACK_URL,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    passReqToCallback : true
+}, async (accessToken, refreshToken, profile, done) => {
+    try {
+        //console.log(profile);
+        console.log(accessToken);
+        const defaultUser = new User({
+            federatedId: profile.emails[0].value,
+            email: profile.emails[0].value,
+            googleId: profile.id,
+            accessContent: false,
+            admin: false
+        });
+        User.findOne({googleId: profile.id})
+            .then(user => {
+                if (!user) {
+                    defaultUser.save()
+                        .then(() => done(null, defaultUser))
+                        .catch(error => done(error, null));
+                } else {
+                    done(null, user);
+                }
+            })
+            .catch(error => done(error, null));
+    } catch (error) {
+        done(error, null)
+    }
+}));
+
+/////////////////////////////////////////////
+/////////////// PASSPORT IDMS ///////////////
+/////////////////////////////////////////////
+
+passport.use("idms-oidc", new OpenIDConnectStrategy({
+    issuer: 'https://sitbfo19-secommunities.cs17.force.com/identity',
+    authorizationURL: 'https://sitbfo19-secommunities.cs17.force.com/identity/idplogin',
+    tokenURL: 'https://sitbfo19-secommunities.cs17.force.com/identity/services/oauth2/token',
+    userInfoURL: 'https://sitbfo19-secommunities.cs17.force.com/identity/services/oauth2/userinfo',
+    clientID: process.env.IDMS_CLIENT_ID,
+    clientSecret: process.env.IDMS_CLIENT_SECRET,
+    callbackURL: process.env.IDMS_CALLBACK_URL,
     passReqToCallback : true
 }, async (accessToken, refreshToken, profile, done) => {
     try {
@@ -97,5 +136,3 @@ passport.use(new OpenIDConnectStrategy({
         done(error, null)
     }
 }));
-
-/////////////// PASSPORT IDMS ///////////////

@@ -3,8 +3,12 @@ import GoogleButton from "react-google-button";
 import { Link, Routes, Route } from 'react-router-dom';
 import { LoginSuccess } from "./LoginSuccess";
 
+import Logout from "../components/LogoutButton";
+import LogoutButton from "../components/LogoutButton";
+import TestApi from "../components/TestApi";
+
 const redirectToGoogleSSO = async () => {
-    const googleLoginURL = "http://localhost:5000/api/authn/login/google";
+    const googleLoginURL = "http://localhost:8080/api/authn/login/google";
     const newWindow = window.open(googleLoginURL, "_blank", "width=500, height=600");
 }
 
@@ -17,19 +21,6 @@ class App extends Component {
         }
     }
 
-    /*
-    componentDidMount(){
-        fetch('http://localhost:5000/api/authz/allusers')
-            .then(response=> response.json())
-            .then(listusers => this.setState({users: listusers}))
-    }
-    */
-
-    /*
-    <h2>Get All Users</h2>
-    <p>{JSON.stringify(this.state)}</p>
-    */
-    
     render(){
         return (
             <div>
@@ -43,7 +34,13 @@ class App extends Component {
                         </div>
                     }>
                     </Route>  
-                    <Route exact path ="/login/google" element={<GoogleButton onClick={redirectToGoogleSSO}/>}></Route>
+                    <Route exact path ="/login/google" element={
+                        <div>
+                            <GoogleButton onClick={redirectToGoogleSSO}/>
+                            <LogoutButton/>
+                            <TestApi/>
+                        </div>
+                    }></Route>
                     <Route exact path ="/login/locally" element={<GoogleButton onClick={redirectToGoogleSSO}/>}></Route>
                     <Route exact path ="/login/idms" element={<GoogleButton onClick={redirectToGoogleSSO}/>}></Route>
                     <Route exact path ="/login/success" element={<LoginSuccess/>}></Route>

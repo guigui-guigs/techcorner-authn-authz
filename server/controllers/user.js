@@ -25,8 +25,8 @@ exports.logout = (req, res, next) => {
     try {
         req.logOut();
         req.session = null;
-        res.clearCookie('session');
-        res.clearCookie('session.sig');
+        res.clearCookie('session',{ domain: 'localhost', path: '/' });
+        res.clearCookie('session.sig', { domain: 'localhost', path: '/' });
         res.status(200).json({message:"Logout successfull !"});
     } catch (error) {
         res.status(400).json({error});
@@ -79,17 +79,22 @@ exports.deleteuser = (req, res, next) => {
     }
 };
 
-exports.test = (req, res, next) => {
-    try {
-        const bearerToken = req.headers.authorization?.split(' ');
-        if (bearerToken[0] === 'Bearer' && bearerToken[1]) {
-            const token = bearerToken[1];
-            const payload = jwt.verify(token, process.env.JWT_SECRET);
-            console.log("ok");
-        } else {
-            res.status(401).json({message: "Unauthorized"});
-        }
-    } catch (error) {
-        res.status(400).json({error});
+exports.loginGoogle = (req, res, next) => {
+
+    const url ='https://example.com';
+    const headers = {
+    "Content-Type": "application/json",
+    "client_id": "1001125",
+    "client_secret": "876JHG76UKFJYGVHf867rFUTFGHCJ8JHV"
     }
-};
+
+    fetch(url, { method: 'POST', headers: headers, body: data})
+        .then((res) => {
+            return res.json()
+        })
+        .then((json) => {
+        // Do something with the returned data.
+        console.log(json);  
+    });
+}
+

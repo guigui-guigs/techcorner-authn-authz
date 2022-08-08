@@ -14,8 +14,8 @@ const errorLoginUrl = "http://localhost:3000/login/error";
 router.post('/authn/signup/local', userCtrl.signupLocal);
 
 /////////////////// LOGIN WITH GOOGLE ///////////////////
-router.get('/authn/login/google', passport.authenticate("openidconnect",{ scope: ["profile", "email"] }));
-router.get('/authn/google/callback', passport.authenticate("openidconnect", {
+router.get('/authn/login/google', passport.authenticate("google-oidc",{ scope: ["profile", "email"] }));
+router.get('/authn/google/callback', passport.authenticate("google-oidc", {
         failureMessage: "Cannot login for the moment, please try again later",
         failureRedirect: errorLoginUrl,
         successRedirect: successLoginUrl
@@ -39,13 +39,13 @@ router.post('/authn/login/local', passport.authenticate("local"), (req,res) => {
     }
 });
 /////////////////// LOGIN WITH IDMS ///////////////////
-//router.get('/authn/login/idms', passport.authenticate("google",{ scope: ["profile", "email"] }));
+router.get('/authn/login/idms', passport.authenticate("idms-oidc"));
 
 router.get('/logout', userCtrl.logout);
 
 router.post('/authz/assign', authmiddleware.IsUserAuthenticated_admin, userCtrl.assign);
 router.post('/authz/rights', authmiddleware.IsUserAuthenticated_admin, userCtrl.GETrights);
-router.get('/authz/allusers', authmiddleware.IsUserAuthenticated_admin, userCtrl.GETallusers);
+router.get('/authz/allusers', authmiddleware.RequestIntrospectionGoogle, userCtrl.GETallusers);
 router.post('/authz/deleteuser', authmiddleware.IsUserAuthenticated_admin, userCtrl.deleteuser);
 
 module.exports = router;
