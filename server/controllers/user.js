@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const axios = require('axios');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -23,10 +24,8 @@ exports.signupLocal = (req, res, next) => {
 
 exports.logout = (req, res, next) => {
     try {
-        req.logOut();
-        req.session = null;
-        res.clearCookie('session',{ domain: 'localhost', path: '/' });
-        res.clearCookie('session.sig', { domain: 'localhost', path: '/' });
+        res.clearCookie('id_token',{ domain: 'localhost', path: '/' });
+        res.clearCookie('access_token', { domain: 'localhost', path: '/' });
         res.status(200).json({message:"Logout successfull !"});
     } catch (error) {
         res.status(400).json({error});
@@ -79,22 +78,45 @@ exports.deleteuser = (req, res, next) => {
     }
 };
 
-exports.loginGoogle = (req, res, next) => {
+exports.getGoogleTokens = async (code) => {
 
-    const url ='https://example.com';
-    const headers = {
-    "Content-Type": "application/json",
-    "client_id": "1001125",
-    "client_secret": "876JHG76UKFJYGVHf867rFUTFGHCJ8JHV"
+    const token_endpoint = 'https://oauth2.googleapis.com/token';
+    const client_secret = process.env.GOOGLE_CLIENT_SECRET;
+    const client_id = process.env.GOOGLE_CLIENT_ID;
+    const callback_url = process.env.GOOGLE_CALLBACK_URL;
+
+    const values = {
+        "code": code,
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "redirect_uri": callback_url,
+        "grant_type": 'authorization_code'
     }
-
-    fetch(url, { method: 'POST', headers: headers, body: data})
-        .then((res) => {
-            return res.json()
-        })
-        .then((json) => {
-        // Do something with the returned data.
-        console.log(json);  
-    });
+    try {
+        const response = await axios.post(token_endpoint, values, {
+            headers: {
+                //'Content-Type': "application/x-www-form-urlencoded"
+            }
+        });
+        return response.data;
+    } catch (error) {
+        //log.error(error);
+        console.log(error);
+    }
 }
 
+exports.getGoogleUser = async ({id_token, access_token}) => {
+    const url = 'https://openidconnect.googleapis.com/v1/userinfo?access_token=' + access_token;
+    console.log(url);
+    try {
+        const response = await axios.post(url, {
+            headers: {
+                'Authorization' : 'Bearer ' + id_token
+            }
+        });
+        return response.data;
+    } catch (error) {
+        //log.error(error);
+        console.log(error);
+    }
+}

@@ -1,6 +1,4 @@
 const User = require('../models/User');
-const fetch = (...args) =>
-  import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const parseCookies = (cookiesStr) => {
     const list = {};
@@ -17,7 +15,7 @@ const parseCookies = (cookiesStr) => {
     return list
 }
 
-exports.IsUserAuthenticated_accesscontent = (req, res, next) => {
+exports.IsUserAuthenticated_viewer = (req, res, next) => {
     if (req.user) {
         // Check if user has rights to access content or not
         User.findOne({federatedId: req.user.federatedId})
@@ -34,6 +32,10 @@ exports.IsUserAuthenticated_accesscontent = (req, res, next) => {
         // block access
         res.status(401).json({message:"You must signin first !"})
     }
+};
+
+exports.IsUserAuthenticated_editor = (req, res, next) => {
+
 };
 
 exports.IsUserAuthenticated_admin = (req, res, next) => {
@@ -60,6 +62,7 @@ exports.RequestIntrospectionGoogle = (req, res, next) => {
     //console.log(req.headers.cookie);
     const cookies = parseCookies(req.headers.cookie);
     const accessToken = cookies["id_token.sig"];
+
     /*
     fetch('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + accessToken)
         .then(response => console.log(response));
