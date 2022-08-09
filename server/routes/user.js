@@ -6,19 +6,18 @@ const authCrl = require('../controllers/auth');
 const authMiddleware = require('../middlewares/auth');
 const authzMiddleware = require('../middlewares/authz');
 
-require("dotenv").config();
-
-router.get('/authn/login/google', authMiddleware.discover_google_OpenIDConfig, authCrl.loginPageGoogle);
-router.get('/authn/google/callback', authCrl.Google_OIDC_initial_handler);
-router.get('/logout', authCrl.logout);
+router.get('/auth/login/google', authMiddleware.discover_google_OpenIDConfig, authCrl.loginPageGoogle);
+router.get('/auth/google/callback', authCrl.Google_OIDC_initial_handler);
+router.get('/auth/logout', authCrl.logout);
 
 router.get('/authz/allusers', authMiddleware.RequestIntrospectionGoogle, authzMiddleware.IsUserAuthenticated_admin, userCtrl.GETallusers);
 router.post('/authz/specificrights', authMiddleware.RequestIntrospectionGoogle, authzMiddleware.IsUserAuthenticated_admin, userCtrl.GETspecificrights);
 router.post('/authz/getusersinfo', authMiddleware.RequestIntrospectionGoogle, authzMiddleware.IsUserAuthenticated_admin, userCtrl.GETusersinfo); // accepts a list of users
+router.post('/authz/createuser', authMiddleware.RequestIntrospectionGoogle, authzMiddleware.IsUserAuthenticated_admin, userCtrl.createuser);
+router.post('/authz/deleteuser', authMiddleware.RequestIntrospectionGoogle, authzMiddleware.IsUserAuthenticated_admin, userCtrl.deleteuser);
 
 /*
-router.post('/authz/assign', authmiddleware.IsUserAuthenticated_admin, userCtrl.assign);
-router.post('/authz/deleteuser', authmiddleware.IsUserAuthenticated_admin, userCtrl.deleteuser);
+router.post('/authz/assign', authMiddleware.IsUserAuthenticated_admin, userCtrl.assign);
 */
 
 module.exports = router;

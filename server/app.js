@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser')
 
 //const helmet = require('helmet');
 const userRoutes = require('./routes/user');
+const resourceRoutes = require('./routes/resource');
 
 require("dotenv").config();
 
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/api', userRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/resources', resourceRoutes);
 
 module.exports = app;

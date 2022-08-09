@@ -88,6 +88,7 @@ exports.logout = (req, res, next) => {
         res.clearCookie('id_token',{ domain: 'localhost', path: '/' });
         res.clearCookie('access_token', { domain: 'localhost', path: '/' });
         res.clearCookie('refresh_token', { domain: 'localhost', path: '/' });
+        // TO THINK TO REVOKE TOKENS ALSO
         res.status(200).json({message:"Logout successfull !"});
     } catch (error) {
         res.status(400).json({error});

@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Api = () => {
-    fetch('http://localhost:8080/api/authz/allusers', {
+    fetch('http://localhost:8080/api/users/authz/allusers', {
         credentials: 'include', // Don't forget to specify this if you need cookies
     })
 }

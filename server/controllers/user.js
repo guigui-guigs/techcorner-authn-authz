@@ -1,17 +1,12 @@
 const User = require('../models/User');
-require("dotenv").config();
 
-// TO INVESTIGATE WHY IT DOESN'T WORK
-exports.assign = (req, res, next) => {
-    if (req.body.accessContent) {
-        User.updateOne({federatedId: req.body.federatedId},{accessContent: req.body.accessContent})
-            .then(() => res.status(200).json({message:"Content assignment successfull !"}))
+exports.assignrights = (req, res, next) => { // TO TEST
+    try {
+        User.updateOne({federatedId: req.body.federatedId},{viewer: req.body.viewer, editor: req.body.editor, admin: req.body.admin})
+            .then(() => res.status(200).json({message:"Rights assignment successfull !"}))
             .catch(error => res.status(400).json({error}));
-    } 
-    if (req.body.admin) {
-        User.updateOne({federatedId: req.body.federatedId},{admin: req.body.admin})
-            .then(() => res.status(200).json({message:"Admin assignment successfull !"}))
-            .catch(error => res.status(400).json({error}));
+    } catch (error) {
+        res.status(400).json({error});
     }
 };
 
@@ -36,9 +31,10 @@ exports.GETspecificrights = (req, res, next) => {
     }
 };
 
-exports.GETusersinfo = (req, res, next) => {
+exports.GETusersinfo = (req, res, next) => { // To develop
     try {
-        
+        const usersdetails = {};
+        res.status(200).json(req.body.users);
     } catch (error) {
         res.status(400).json({error});
     }
@@ -46,19 +42,25 @@ exports.GETusersinfo = (req, res, next) => {
 
 exports.deleteuser = (req, res, next) => {
     try {
-        if (req.body.googleId) {
-            User.deleteOne({googleId: req.body.googleId})
-            .then(() => res.status(200).json({message:"User successfully deleted !"}))
+        User.deleteOne({federatedId: req.body.federatedId})
+        .then(() => res.status(200).json({message:"User successfully deleted !"}))
+        .catch(error => res.status(400).json({error}));
+    } catch (error) {
+        res.status(400).json({error});
+    }
+};
+
+exports.createuser = (req, res, next) => { // is it possible to have magic emails also ?
+    try {
+        const user = new User({
+            federatedId: req.body.federatedId,
+            viewer: req.body.viewer,
+            editor: req.body.editor,
+            admin: req.body.admin
+        });
+        user.save()
+            .then(() => res.status(200).json({message: 'User successfully created'}))
             .catch(error => res.status(400).json({error}));
-        } else if (req.body.federatedId) {
-            User.deleteOne({federatedId: req.body.federatedId})
-            .then(() => res.status(200).json({message:"User successfully deleted !"}))
-            .catch(error => res.status(400).json({error}));
-        } else if (req.body.email) {
-            User.deleteOne({email: req.body.email})
-            .then(() => res.status(200).json({message:"User successfully deleted !"}))
-            .catch(error => res.status(400).json({error}));
-        }
     } catch (error) {
         res.status(400).json({error});
     }
