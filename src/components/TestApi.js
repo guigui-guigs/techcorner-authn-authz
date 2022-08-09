@@ -7,7 +7,7 @@ const Api = () => {
 }
 
 const TestApi = () => {
-    return (<button onClick={Api}>Test API Get all users</button>)
+    return (<button onClick={Api}>Test API GET all users</button>)
   }
 
 export default TestApi

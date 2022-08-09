@@ -3,11 +3,9 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const userSchema = mongoose.Schema({
     federatedId: {type: String, required: true, unique: true},
-    googleId: {type: String, required: false},
-    email: {type: String, required: true, unique: true},
-    accessContent: {type: Boolean, required: true},
-    admin: {type: Boolean, required: true},
-    password: {type: String, required: false}
+    viewer: {type: Boolean, required: true},
+    editor: {type: Boolean, required: true},
+    admin: {type: Boolean, required: true}
 },{collection: 'users'});
 
 userSchema.plugin(uniqueValidator);

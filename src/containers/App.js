@@ -17,8 +17,6 @@ class App extends Component {
                         <div>
                             <p>Welcome Home !</p>
                             <Link to="/login/google">Login with Google</Link>
-                            <Link to="/login/locally">Login locally</Link>
-                            <Link to="/login/idms">Login with IDMS</Link>
                         </div>
                     }>
                     </Route>  
