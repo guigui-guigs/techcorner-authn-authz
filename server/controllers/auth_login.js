@@ -6,7 +6,6 @@ require("dotenv").config();
 
 exports.discover_google_OpenIDConfig = async (req, res, next) => {
     url='https://accounts.google.com/.well-known/openid-configuration';
-
     try {
         const response = await axios.get(url, {
             headers: {
@@ -14,6 +13,7 @@ exports.discover_google_OpenIDConfig = async (req, res, next) => {
             }
         });
         req.openidconfig = response.data;
+        //console.log(req.openidconfig);
         next();
     } catch (error) {
         //log.error(error);
@@ -44,13 +44,15 @@ exports.Google_OIDC_handler = async (req, res, next) => {
         // Get ID & Access tokens
         const code = req.query.code;
         const { id_token, access_token } = await userCtrl.getGoogleTokens(code);
-        console.log({id_token, access_token});
+        //console.log({id_token, access_token});
 
         // Get user with id_token
         const googleUser = await userCtrl.getGoogleUser({id_token, access_token});
-        console.log({googleUser});
+        const googleID = googleUser.sub;
+        //console.log(googleID);
 
         // Check user in the db + register him
+        
         
 
         // Set cookies

@@ -17,9 +17,11 @@ mongoose.connect('mongodb+srv://admin:Hellodu68130$_$M@cluster0.0qfuotm.mongodb.
   .catch(error => console.log(error));
 */
 
+/*
 mongoose.connect('mongodb://localhost:27017/tech-corner')
 .then(() => console.log('Connection success to MongoDB !'))
 .catch(error => console.log(error));
+*/
 
 //app.use(helmet());
 app.use(express.json());

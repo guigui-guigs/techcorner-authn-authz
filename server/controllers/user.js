@@ -107,7 +107,6 @@ exports.getGoogleTokens = async (code) => {
 
 exports.getGoogleUser = async ({id_token, access_token}) => {
     const url = 'https://openidconnect.googleapis.com/v1/userinfo?access_token=' + access_token;
-    console.log(url);
     try {
         const response = await axios.post(url, {
             headers: {
