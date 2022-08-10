@@ -15,9 +15,15 @@ router.post('/authz/specificrights', authMiddleware.RequestIntrospectionGoogle, 
 router.post('/authz/getusersinfo', authMiddleware.RequestIntrospectionGoogle, authzMiddleware.IsUserAuthenticated_admin, userCtrl.GETusersinfo); // accepts a list of users
 router.post('/authz/createuser', authMiddleware.RequestIntrospectionGoogle, authzMiddleware.IsUserAuthenticated_admin, userCtrl.createuser);
 router.post('/authz/deleteuser', authMiddleware.RequestIntrospectionGoogle, authzMiddleware.IsUserAuthenticated_admin, userCtrl.deleteuser);
+router.post('/authz/assignrights', authMiddleware.RequestIntrospectionGoogle, authzMiddleware.IsUserAuthenticated_admin, userCtrl.assignrights);
 
 /*
-router.post('/authz/assign', authMiddleware.IsUserAuthenticated_admin, userCtrl.assign);
+router.get('/authz/allusers', userCtrl.GETallusers);
+router.post('/authz/specificrights', userCtrl.GETspecificrights);
+router.post('/authz/getusersinfo', userCtrl.GETusersinfo); // accepts a list of users
+router.post('/authz/createuser', userCtrl.createuser);
+router.post('/authz/deleteuser', userCtrl.deleteuser);
+router.post('/authz/assignrights', userCtrl.assignrights);
 */
 
 module.exports = router;
